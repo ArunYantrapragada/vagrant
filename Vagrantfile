@@ -11,7 +11,10 @@ Vagrant.configure("2") do |config|
         subconfig.vm.box = BOX_IMAGE
         subconfig.vm.hostname = "master"
         subconfig.vm.network :private_network, ip: "10.0.0.10"
+        subconfig.vm.provision :shell, path: "bootstrap.sh"
     end
+
+   # config.vm.provision :shell, path: "bootstrap.sh"
 
     (1..NODE_COUNT).each do |i|
         config.vm.define "node#{i}" do |subconfig|
