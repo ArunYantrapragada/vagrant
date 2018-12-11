@@ -5,6 +5,12 @@
 # boxes at https://atlas.hashicorp.com/search.
 BOX_IMAGE = "ubuntu/trusty64"
 NODE_COUNT = 2
+MAC_USER = "arunyantrapragada"
+VM_USER = 'vagrant'
+# Host folder to sync
+HOST_PATH = '/Users/' + MAC_USER + '/workdir/vagrant-project'
+# Where to sync to on Guest — 'vagrant' is the default user name
+GUEST_PATH = '/home/' + VM_USER + '/'
 
 Vagrant.configure("2") do |config|
     config.vm.define "master" do |subconfig|
@@ -23,6 +29,11 @@ Vagrant.configure("2") do |config|
             subconfig.vm.network :private_network, ip: "10.0.0.#{i + 10}"
         end
     end
+
+    # Sync folder
+    config.vm.synced_folder HOST_PATH, GUEST_PATH
+    # Disable default Vagrant folder, use a unique path per project
+    config.vm.synced_folder '.', '/home/'+VM_USER+'/', disabled: false
 
   # Provisioning with SHELL
   config.vm.provision "shell", inline: <<-SHELL
